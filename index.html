@@ -320,6 +320,11 @@ body {
   background: var(--orange-accent);
 }
 
+.product-row.inactive {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
 /* ============================================
    CART DRAWER
    ============================================ */
@@ -734,9 +739,9 @@ function parseCSV(csv) {
     const active = cols[5] ? clean(cols[5]).toLowerCase() : 'si';
 
     if (!cat || !name || isNaN(price)) continue;
-    if (active === 'no' || active === 'n' || active === '0') continue;
+    const isActive = !(active === 'no' || active === 'n' || active === '0');
 
-    allProducts.push({ cat, name, desc, price, unit });
+    allProducts.push({ cat, name, desc, price, unit, active: isActive });
   }
 
   categories = [...new Set(allProducts.map(p => p.cat))];
@@ -859,7 +864,7 @@ function renderProducts() {
       const key = productKey(p);
       const inCart = cart[key] && cart[key].qty > 0;
       html += `
-        <div class="product-row">
+        <div class="product-row${p.active ? '' : ' inactive'}">
           <div class="product-info">
             <div class="product-name">${escapeHTML(p.name)}</div>
             ${p.desc ? `<div class="product-desc">${escapeHTML(p.desc)}</div>` : ''}
