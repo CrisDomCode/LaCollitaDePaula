@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Collita de Paula — Frutas y Verduras Frescas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================
+   CSS RESET & VARIABLES
+   ============================================ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --green-900: #1a3a1a;
+  --green-800: #234d23;
+  --green-700: #2d6a2d;
+  --green-600: #3a8a3a;
+  --green-500: #4caf50;
+  --green-400: #72c576;
+  --green-100: #e8f5e9;
+  --green-50: #f1f8f1;
+  --cream: #fdfcf7;
+  --cream-dark: #f5f0e3;
+  --warm-white: #fefefe;
+  --text-primary: #1a1a1a;
+  --text-secondary: #555;
+  --text-muted: #888;
+  --orange-accent: #e67e22;
+  --orange-light: #fff3e0;
+  --red-accent: #c0392b;
+  --whatsapp: #25d366;
+  --whatsapp-dark: #1da851;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 30px rgba(0,0,0,0.12);
+  --radius: 10px;
+  --radius-lg: 16px;
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --font-body: 'DM Sans', -apple-system, sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--cream);
+  color: var(--text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+.site-header {
+  background: var(--green-800);
+  color: white;
+  padding: 1.25rem 1rem;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+}
+
+.header-inner {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand h1 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+.brand small {
+  font-size: 0.75rem;
+  opacity: 0.7;
+  font-weight: 400;
+  display: block;
+  margin-top: 2px;
+}
+
+.cart-toggle {
+  background: var(--whatsapp);
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 50px;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: transform 0.15s, background 0.15s;
+  white-space: nowrap;
+}
+
+.cart-toggle:hover { background: var(--whatsapp-dark); transform: scale(1.03); }
+
+.cart-toggle .badge {
+  background: white;
+  color: var(--green-800);
+  font-size: 0.75rem;
+  font-weight: 700;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================
+   LOADING & ERROR STATES
+   ============================================ */
+.loading-state {
+  text-align: center;
+  padding: 4rem 1rem;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--green-100);
+  border-top-color: var(--green-600);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.error-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--red-accent);
+}
+
+.error-state button {
+  margin-top: 1rem;
+  background: var(--green-700);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-family: var(--font-body);
+}
+
+/* ============================================
+   SEARCH
+   ============================================ */
+.search-bar {
+  max-width: 800px;
+  margin: 1rem auto 0;
+  padding: 0 1rem;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.75rem;
+  border: 2px solid var(--green-100);
+  border-radius: 50px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='%23888' viewBox='0 0 24 24'%3E%3Cpath d='M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3C/svg%3E") no-repeat 0.85rem center;
+  transition: border-color 0.2s;
+  outline: none;
+}
+
+.search-bar input:focus { border-color: var(--green-500); }
+
+/* ============================================
+   CATEGORY NAV
+   ============================================ */
+.category-nav {
+  max-width: 800px;
+  margin: 1rem auto 0;
+  padding: 0 1rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.category-nav::-webkit-scrollbar { display: none; }
+
+.category-pills {
+  display: flex;
+  gap: 0.5rem;
+  padding-bottom: 0.25rem;
+}
+
+.pill {
+  flex-shrink: 0;
+  padding: 0.45rem 0.9rem;
+  border-radius: 50px;
+  border: 1.5px solid var(--green-200, #c8e6c9);
+  background: white;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--green-800);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.pill:hover { background: var(--green-100); }
+
+.pill.active {
+  background: var(--green-800);
+  color: white;
+  border-color: var(--green-800);
+}
+
+/* ============================================
+   PRODUCTS
+   ============================================ */
+.main-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.category-section { margin-bottom: 2rem; }
+
+.category-title {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  color: var(--green-800);
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid var(--green-100);
+}
+
+.product-list { display: flex; flex-direction: column; gap: 0.4rem; }
+
+.product-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  padding: 0.65rem 0.85rem;
+  border-radius: var(--radius);
+  border: 1px solid #eee;
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+
+.product-row:hover { border-color: var(--green-400); box-shadow: var(--shadow-sm); }
+
+.product-info { flex: 1; min-width: 0; }
+
+.product-name {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.product-desc {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+.product-price {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--green-700);
+  margin: 0 0.75rem;
+  white-space: nowrap;
+}
+
+.add-btn {
+  background: var(--green-600);
+  color: white;
+  border: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, transform 0.1s;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.add-btn:hover { background: var(--green-500); transform: scale(1.1); }
+.add-btn:active { transform: scale(0.95); }
+
+.add-btn.in-cart {
+  background: var(--orange-accent);
+}
+
+/* ============================================
+   CART DRAWER
+   ============================================ */
+.cart-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 200;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s, visibility 0.25s;
+}
+
+.cart-overlay.open { opacity: 1; visibility: visible; }
+
+.cart-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(420px, 92vw);
+  height: 100%;
+  background: var(--cream);
+  z-index: 201;
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  box-shadow: -4px 0 30px rgba(0,0,0,0.15);
+}
+
+.cart-drawer.open { transform: translateX(0); }
+
+.cart-header {
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #eee;
+  background: white;
+}
+
+.cart-header h2 {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+}
+
+.cart-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: 0.25rem;
+  line-height: 1;
+}
+
+.cart-items {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.cart-empty {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 3rem 1rem;
+  font-size: 0.95rem;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.cart-item-info { flex: 1; min-width: 0; }
+
+.cart-item-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cart-item-unit {
+  font-size: 0.73rem;
+  color: var(--text-muted);
+}
+
+.cart-item-price {
+  font-size: 0.85rem;
+  color: var(--green-700);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.qty-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.qty-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid #ddd;
+  background: white;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.qty-btn:hover { border-color: var(--green-500); }
+
+.qty-btn.remove { color: var(--red-accent); border-color: #f5c6c6; }
+.qty-btn.remove:hover { background: #ffeaea; }
+
+.qty-value {
+  font-size: 0.9rem;
+  font-weight: 600;
+  min-width: 28px;
+  text-align: center;
+}
+
+.cart-footer {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid #eee;
+  background: white;
+}
+
+.cart-total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.cart-total .amount { color: var(--green-700); font-size: 1.15rem; }
+
+.whatsapp-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.85rem;
+  background: var(--whatsapp);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  text-decoration: none;
+}
+
+.whatsapp-btn:hover { background: var(--whatsapp-dark); }
+.whatsapp-btn:active { transform: scale(0.98); }
+
+.whatsapp-btn svg { width: 22px; height: 22px; fill: white; }
+
+.cart-note {
+  font-size: 0.73rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+.site-footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.site-footer a {
+  color: var(--whatsapp-dark);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* ============================================
+   TOAST
+   ============================================ */
+.toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--green-800);
+  color: white;
+  padding: 0.65rem 1.25rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  z-index: 300;
+  opacity: 0;
+  transition: transform 0.3s, opacity 0.3s;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 480px) {
+  .brand h1 { font-size: 1.2rem; }
+  .cart-toggle { padding: 0.5rem 0.8rem; font-size: 0.8rem; }
+  .product-row { padding: 0.55rem 0.65rem; }
+  .product-name { font-size: 0.82rem; }
+  .product-price { font-size: 0.88rem; margin: 0 0.5rem; }
+  .category-title { font-size: 1.1rem; }
+}
+
+/* ============================================
+   CONFIG BANNER (shown when no Sheet ID)
+   ============================================ */
+.config-banner {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: var(--orange-light);
+  border: 2px dashed var(--orange-accent);
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+
+.config-banner h2 { color: var(--orange-accent); margin-bottom: 0.5rem; font-family: var(--font-display); }
+.config-banner code { background: #fff; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="brand">
+      <h1>La Collita de Paula</h1>
+      <small>Frutas y Verduras Frescas — Pedido por WhatsApp</small>
+    </div>
+    <button class="cart-toggle" onclick="toggleCart()">
+      🛒 Pedido <span class="badge" id="cart-count">0</span>
+    </button>
+  </div>
+</header>
+
+<!-- SEARCH -->
+<div class="search-bar">
+  <input type="text" id="search-input" placeholder="Buscar producto..." oninput="filterProducts()">
+</div>
+
+<!-- CATEGORY NAV -->
+<nav class="category-nav">
+  <div class="category-pills" id="category-pills"></div>
+</nav>
+
+<!-- MAIN -->
+<main class="main-content" id="main-content">
+  <div class="loading-state" id="loading">
+    <div class="loading-spinner"></div>
+    <p>Cargando catálogo...</p>
+  </div>
+</main>
+
+<!-- CART OVERLAY -->
+<div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
+
+<!-- CART DRAWER -->
+<div class="cart-drawer" id="cart-drawer">
+  <div class="cart-header">
+    <h2>Tu Pedido</h2>
+    <button class="cart-close" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cart-items">
+    <div class="cart-empty">Añade productos desde el catálogo</div>
+  </div>
+  <div class="cart-footer" id="cart-footer" style="display:none;">
+    <div class="cart-total">
+      <span>Total estimado</span>
+      <span class="amount" id="cart-total">0,00 €</span>
+    </div>
+    <a class="whatsapp-btn" id="whatsapp-link" href="#" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Enviar pedido por WhatsApp
+    </a>
+    <p class="cart-note">Se abrirá WhatsApp con el resumen de tu pedido</p>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <p>La Collita de Paula — Producto fresco de verdad</p>
+  <p style="margin-top:0.3rem;">Contacto directo: <a href="https://wa.me/34657276760">657 27 67 60</a> (Santi)</p>
+</footer>
+
+<script>
+/* ============================================
+   CONFIGURATION
+   ============================================ */
+
+// ┌─────────────────────────────────────────────────────────────┐
+// │  INSTRUCCIONES PARA SANTI:                                   │
+// │                                                               │
+// │  1. Abre Google Sheets y crea una hoja con estas columnas:    │
+// │     A: Categoría  |  B: Producto  |  C: Descripción           │
+// │     D: Precio     |  E: Unidad    |  F: Activo                │
+// │                                                               │
+// │  2. Ve a Archivo > Compartir > Publicar en la web             │
+// │     Selecciona "Hoja 1" y "CSV", y pulsa Publicar.            │
+// │                                                               │
+// │  3. Copia el ID de la URL publicada (empieza por 2PACX-...):  │
+// │     .../d/e/ESTE_ES_EL_ID/pubhtml?...                         │
+// │                                                               │
+// │  4. Pega el ID aquí abajo entre las comillas:                 │
+// └─────────────────────────────────────────────────────────────┘
+
+const SHEET_ID = '2PACX-1vT1MzTq40rlG93Efp6iE6ftglq09sHb2PId72j8DjTql-OphEqc4A-BzIxtBlifTylG983sHLAU0GHh'; // <-- PEGAR AQUÍ EL ID DEL GOOGLE SHEET
+const SHEET_NAME = 'Hoja1'; // Nombre de la pestaña (por defecto "Hoja1")
+const WHATSAPP_NUMBER = '34657276760'; // Número con código de país
+const BUSINESS_NAME = 'La Collita de Paula';
+
+/* ============================================
+   STATE
+   ============================================ */
+let allProducts = [];
+let categories = [];
+let cart = {};
+let activeCategory = 'all';
+
+// Persist cart in localStorage
+try {
+  const saved = localStorage.getItem('collita_cart');
+  if (saved) cart = JSON.parse(saved);
+} catch(e) {}
+
+/* ============================================
+   FETCH DATA FROM GOOGLE SHEETS
+   ============================================ */
+async function loadProducts() {
+  const mainEl = document.getElementById('main-content');
+  const loadingEl = document.getElementById('loading');
+
+  if (!SHEET_ID) {
+    mainEl.innerHTML = `
+      <div class="config-banner">
+        <h2>⚙️ Configuración necesaria</h2>
+        <p style="margin-top:0.5rem;">Para conectar el catálogo, abre este archivo HTML y configura el <code>SHEET_ID</code> con el ID de tu Google Sheet.</p>
+        <p style="margin-top:1rem;font-size:0.85rem;color:#666;">Mientras tanto, aquí tienes un catálogo de demostración:</p>
+      </div>
+    `;
+    loadDemoProducts();
+    return;
+  }
+
+  try {
+    const url = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?gid=0&single=true&output=csv`;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('No se pudo cargar la hoja');
+    const csv = await response.text();
+    parseCSV(csv);
+    renderAll();
+  } catch (err) {
+    mainEl.innerHTML = `
+      <div class="error-state">
+        <p>Error al cargar el catálogo</p>
+        <p style="font-size:0.85rem;margin-top:0.5rem;">${err.message}</p>
+        <button onclick="loadProducts()">Reintentar</button>
+      </div>
+    `;
+  }
+}
+
+function parseCSV(csv) {
+  const lines = csv.split('\n').filter(l => l.trim());
+  if (lines.length < 2) return;
+
+  // Skip header row
+  allProducts = [];
+  for (let i = 1; i < lines.length; i++) {
+    const cols = parseCSVLine(lines[i]);
+    if (cols.length < 4) continue;
+
+    const cat = clean(cols[0]);
+    const name = clean(cols[1]);
+    const desc = clean(cols[2]) || '';
+    const price = parseFloat((cols[3] || '').replace(',', '.').replace(/[^0-9.]/g, ''));
+    const unit = clean(cols[4]) || '';
+    const active = cols[5] ? clean(cols[5]).toLowerCase() : 'si';
+
+    if (!cat || !name || isNaN(price)) continue;
+    if (active === 'no' || active === 'n' || active === '0') continue;
+
+    allProducts.push({ cat, name, desc, price, unit });
+  }
+
+  categories = [...new Set(allProducts.map(p => p.cat))];
+}
+
+function parseCSVLine(line) {
+  const result = [];
+  let current = '';
+  let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (ch === '"') {
+      if (inQuotes && line[i+1] === '"') { current += '"'; i++; }
+      else { inQuotes = !inQuotes; }
+    } else if (ch === ',' && !inQuotes) {
+      result.push(current);
+      current = '';
+    } else {
+      current += ch;
+    }
+  }
+  result.push(current);
+  return result;
+}
+
+function clean(s) {
+  return (s || '').replace(/^["'\s]+|["'\s]+$/g, '').trim();
+}
+
+/* ============================================
+   DEMO PRODUCTS (when no Sheet configured)
+   ============================================ */
+function loadDemoProducts() {
+  allProducts = [
+    { cat:'Frutas', name:'Aguacate 1ª', desc:'KG', price:4.65, unit:'KG' },
+    { cat:'Frutas', name:'Plátano Canarias Extra', desc:'KG', price:2.25, unit:'KG' },
+    { cat:'Frutas', name:'Manzana Golden', desc:'KG (75/80)', price:2.25, unit:'KG' },
+    { cat:'Frutas', name:'Fresón Extra', desc:'KG', price:5.75, unit:'KG' },
+    { cat:'Frutas', name:'Limón Extra', desc:'KG', price:1.85, unit:'KG' },
+    { cat:'Frutas', name:'Naranja Extra', desc:'KG', price:1.50, unit:'KG' },
+    { cat:'Frutas', name:'Sandía S/Pepitas', desc:'KG', price:2.45, unit:'KG' },
+    { cat:'Verduras', name:'Tomate Daniela Extra', desc:'KG', price:2.55, unit:'KG' },
+    { cat:'Verduras', name:'Calabacín Extra', desc:'KG', price:2.55, unit:'KG' },
+    { cat:'Verduras', name:'Pimiento Rojo Extra', desc:'KG', price:2.95, unit:'KG' },
+    { cat:'Verduras', name:'Lechuga Iceberg Extra', desc:'Pieza', price:1.45, unit:'UD' },
+    { cat:'Verduras', name:'Champiñón', desc:'KG', price:3.65, unit:'KG' },
+    { cat:'Verduras', name:'Espinacas Manojo', desc:'Aprox. 390gr', price:1.75, unit:'UD' },
+    { cat:'Patatas y Cebollas', name:'Patata Agria Saco Yute', desc:'KG', price:0.85, unit:'KG' },
+    { cat:'Patatas y Cebollas', name:'Cebolla Seca Mediana', desc:'KG', price:1.05, unit:'KG' },
+    { cat:'Patatas y Cebollas', name:'Boniato Rojo', desc:'KG', price:1.95, unit:'KG' },
+    { cat:'IV-V Gamma', name:'Patata Pelada Tortilla', desc:'5KG', price:1.45, unit:'5KG' },
+    { cat:'IV-V Gamma', name:'Ensalada Mezclum', desc:'500GR', price:3.95, unit:'500GR' },
+    { cat:'Frutos Secos', name:'Huevos Talla M', desc:'Docena', price:2.95, unit:'DOC' },
+  ];
+  categories = [...new Set(allProducts.map(p => p.cat))];
+  renderAll();
+}
+
+/* ============================================
+   RENDER
+   ============================================ */
+function renderAll() {
+  renderPills();
+  renderProducts();
+  updateCartUI();
+}
+
+function renderPills() {
+  const container = document.getElementById('category-pills');
+  let html = `<button class="pill ${activeCategory === 'all' ? 'active' : ''}" onclick="setCategory('all')">Todos</button>`;
+  categories.forEach(cat => {
+    html += `<button class="pill ${activeCategory === cat ? 'active' : ''}" onclick="setCategory('${escapeAttr(cat)}')">${escapeHTML(cat)}</button>`;
+  });
+  container.innerHTML = html;
+}
+
+function renderProducts() {
+  const container = document.getElementById('main-content');
+  const search = document.getElementById('search-input').value.toLowerCase().trim();
+
+  let filtered = allProducts;
+  if (activeCategory !== 'all') {
+    filtered = filtered.filter(p => p.cat === activeCategory);
+  }
+  if (search) {
+    filtered = filtered.filter(p =>
+      p.name.toLowerCase().includes(search) ||
+      p.desc.toLowerCase().includes(search) ||
+      p.cat.toLowerCase().includes(search)
+    );
+  }
+
+  if (filtered.length === 0) {
+    // Keep config banner if present
+    const banner = container.querySelector('.config-banner');
+    const bannerHTML = banner ? banner.outerHTML : '';
+    container.innerHTML = bannerHTML + `<div class="error-state" style="color:var(--text-muted)"><p>No se encontraron productos</p></div>`;
+    return;
+  }
+
+  // Group by category
+  const grouped = {};
+  filtered.forEach(p => {
+    if (!grouped[p.cat]) grouped[p.cat] = [];
+    grouped[p.cat].push(p);
+  });
+
+  // Keep config banner if present
+  const banner = container.querySelector('.config-banner');
+  const bannerHTML = banner ? banner.outerHTML : '';
+
+  let html = bannerHTML;
+  for (const cat of categories) {
+    if (!grouped[cat]) continue;
+    html += `<section class="category-section" id="cat-${escapeAttr(cat)}">`;
+    html += `<h2 class="category-title">${escapeHTML(cat)}</h2>`;
+    html += `<div class="product-list">`;
+    grouped[cat].forEach(p => {
+      const key = productKey(p);
+      const inCart = cart[key] && cart[key].qty > 0;
+      html += `
+        <div class="product-row">
+          <div class="product-info">
+            <div class="product-name">${escapeHTML(p.name)}</div>
+            ${p.desc ? `<div class="product-desc">${escapeHTML(p.desc)}</div>` : ''}
+          </div>
+          <div class="product-price">${formatPrice(p.price)} €${p.unit ? '/' + escapeHTML(p.unit) : ''}</div>
+          <button class="add-btn ${inCart ? 'in-cart' : ''}" onclick="addToCart('${escapeAttr(key)}', '${escapeAttr(p.name)}', ${p.price}, '${escapeAttr(p.unit || '')}', '${escapeAttr(p.desc || '')}')">
+            ${inCart ? cart[key].qty : '+'}
+          </button>
+        </div>
+      `;
+    });
+    html += `</div></section>`;
+  }
+  container.innerHTML = html;
+}
+
+/* ============================================
+   CATEGORY FILTER
+   ============================================ */
+function setCategory(cat) {
+  activeCategory = cat;
+  renderPills();
+  renderProducts();
+  if (cat !== 'all') {
+    const section = document.getElementById('cat-' + cat);
+    if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function filterProducts() {
+  renderProducts();
+}
+
+/* ============================================
+   CART LOGIC
+   ============================================ */
+function addToCart(key, name, price, unit, desc) {
+  if (!cart[key]) {
+    cart[key] = { name, price, unit, desc, qty: 0 };
+  }
+  cart[key].qty += 1;
+  saveCart();
+  updateCartUI();
+  renderProducts(); // update button states
+  showToast(`${name} añadido`);
+}
+
+function changeQty(key, delta) {
+  if (!cart[key]) return;
+  cart[key].qty += delta;
+  if (cart[key].qty <= 0) delete cart[key];
+  saveCart();
+  updateCartUI();
+  renderProducts();
+}
+
+function saveCart() {
+  try { localStorage.setItem('collita_cart', JSON.stringify(cart)); } catch(e) {}
+}
+
+function updateCartUI() {
+  const keys = Object.keys(cart);
+  const count = keys.reduce((sum, k) => sum + cart[k].qty, 0);
+  const total = keys.reduce((sum, k) => sum + cart[k].price * cart[k].qty, 0);
+
+  document.getElementById('cart-count').textContent = count;
+
+  const itemsEl = document.getElementById('cart-items');
+  const footerEl = document.getElementById('cart-footer');
+
+  if (keys.length === 0) {
+    itemsEl.innerHTML = '<div class="cart-empty">Añade productos desde el catálogo</div>';
+    footerEl.style.display = 'none';
+    return;
+  }
+
+  footerEl.style.display = 'block';
+  document.getElementById('cart-total').textContent = formatPrice(total) + ' €';
+
+  let html = '';
+  keys.forEach(key => {
+    const item = cart[key];
+    html += `
+      <div class="cart-item">
+        <div class="cart-item-info">
+          <div class="cart-item-name">${escapeHTML(item.name)}</div>
+          <div class="cart-item-unit">${escapeHTML(item.desc || item.unit)} — ${formatPrice(item.price)} €</div>
+        </div>
+        <div class="qty-controls">
+          <button class="qty-btn ${item.qty === 1 ? 'remove' : ''}" onclick="changeQty('${escapeAttr(key)}', -1)">${item.qty === 1 ? '🗑' : '−'}</button>
+          <span class="qty-value">${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty('${escapeAttr(key)}', 1)">+</button>
+        </div>
+        <div class="cart-item-price">${formatPrice(item.price * item.qty)} €</div>
+      </div>
+    `;
+  });
+  itemsEl.innerHTML = html;
+
+  // Update WhatsApp link
+  updateWhatsAppLink(total);
+}
+
+function updateWhatsAppLink(total) {
+  const keys = Object.keys(cart);
+  if (keys.length === 0) return;
+
+  let msg = `🛒 *Nuevo Pedido — ${BUSINESS_NAME}*\n\n`;
+  keys.forEach(key => {
+    const item = cart[key];
+    msg += `• ${item.name} — x${item.qty} ${item.unit ? '(' + item.unit + ')' : ''} — ${formatPrice(item.price * item.qty)} €\n`;
+  });
+  msg += `\n💰 *Total estimado: ${formatPrice(total)} €*`;
+  msg += `\n\n📍 Nombre / empresa:\n📅 Fecha de entrega deseada:`;
+
+  const link = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+  document.getElementById('whatsapp-link').href = link;
+}
+
+/* ============================================
+   CART DRAWER TOGGLE
+   ============================================ */
+function toggleCart() {
+  const drawer = document.getElementById('cart-drawer');
+  const overlay = document.getElementById('cart-overlay');
+  const isOpen = drawer.classList.contains('open');
+  drawer.classList.toggle('open');
+  overlay.classList.toggle('open');
+  document.body.style.overflow = isOpen ? '' : 'hidden';
+}
+
+/* ============================================
+   TOAST
+   ============================================ */
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 1500);
+}
+
+/* ============================================
+   HELPERS
+   ============================================ */
+function productKey(p) {
+  return (p.cat + '_' + p.name).replace(/[^a-zA-Z0-9áéíóúñÁÉÍÓÚÑ_]/g, '_');
+}
+
+function formatPrice(n) {
+  return n.toFixed(2).replace('.', ',');
+}
+
+function escapeHTML(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function escapeAttr(s) {
+  return s.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+}
+
+/* ============================================
+   INIT
+   ============================================ */
+loadProducts();
+</script>
+
+</body>
+</html>
