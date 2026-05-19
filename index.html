@@ -991,16 +991,21 @@ function updateWhatsAppLink(total) {
   const keys = Object.keys(cart);
   if (keys.length === 0) return;
 
-  let msg = `🛒 *Nuevo Pedido — ${BUSINESS_NAME}*\n\n`;
+  const lines = [];
+  lines.push(`*Nuevo Pedido — ${BUSINESS_NAME}*`);
+  lines.push('');
   keys.forEach(key => {
     const item = cart[key];
-    msg += `• ${item.name} — x${item.qty} ${item.unit ? '(' + item.unit + ')' : ''} — ${formatPrice(item.price * item.qty)} €\n`;
+    lines.push(`• ${item.name} — x${item.qty}${item.unit ? ' (' + item.unit + ')' : ''} — ${formatPrice(item.price * item.qty)} €`);
   });
-  msg += `\n💰 *Total estimado: ${formatPrice(total)} €*`;
-  msg += `\n\n📍 Nombre / empresa:\n📅 Fecha de entrega deseada:`;
+  lines.push('');
+  lines.push(`*Total estimado: ${formatPrice(total)} €*`);
+  lines.push('');
+  lines.push('Nombre / empresa:');
+  lines.push('Fecha de entrega deseada:');
 
-  const link = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
-  document.getElementById('whatsapp-link').href = link;
+  const encoded = lines.map(l => encodeURIComponent(l)).join('%0A');
+  document.getElementById('whatsapp-link').setAttribute('href', `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`);
 }
 
 /* ============================================
