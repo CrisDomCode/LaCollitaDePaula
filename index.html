@@ -863,9 +863,13 @@ function renderProducts() {
             ${p.desc ? `<div class="product-desc">${escapeHTML(p.desc)}</div>` : ''}
           </div>
           <div class="product-price">${formatPrice(p.price)} €${p.unit ? '/' + escapeHTML(p.unit) : ''}</div>
-          <button class="add-btn ${inCart ? 'in-cart' : ''}" onclick="addToCart('${escapeAttr(key)}', '${escapeAttr(p.name)}', ${p.price}, '${escapeAttr(p.unit || '')}', '${escapeAttr(p.desc || '')}')">
-            ${inCart ? cart[key].qty : '+'}
-          </button>
+          ${inCart ? `
+          <div class="qty-controls">
+            <button class="qty-btn ${cart[key].qty === 1 ? 'remove' : ''}" onclick="changeQty('${escapeAttr(key)}', -1)">${cart[key].qty === 1 ? '🗑' : '−'}</button>
+            <span class="qty-value">${cart[key].qty}</span>
+            <button class="qty-btn" onclick="changeQty('${escapeAttr(key)}', 1)">+</button>
+          </div>` : `
+          <button class="add-btn" onclick="addToCart('${escapeAttr(key)}', '${escapeAttr(p.name)}', ${p.price}, '${escapeAttr(p.unit || '')}', '${escapeAttr(p.desc || '')}')">+</button>`}
         </div>
       `;
     });
