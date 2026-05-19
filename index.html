@@ -862,7 +862,7 @@ function renderProducts() {
             <div class="product-name">${escapeHTML(p.name)}</div>
             ${p.desc ? `<div class="product-desc">${escapeHTML(p.desc)}</div>` : ''}
           </div>
-          <div class="product-price">${formatPrice(p.price)} €${p.unit ? '/' + escapeHTML(p.unit) : ''}</div>
+          <div class="product-price">${formatPrice(p.price)} €${p.unit ? `<span style="font-size:0.7em;font-weight:500;opacity:0.7">/${escapeHTML(p.unit)}</span>` : ''}</div>
           ${inCart ? `
           <div class="qty-controls">
             <button class="qty-btn ${cart[key].qty === 1 ? 'remove' : ''}" onclick="changeQty('${escapeAttr(key)}', -1)">${cart[key].qty === 1 ? '🗑' : '−'}</button>
