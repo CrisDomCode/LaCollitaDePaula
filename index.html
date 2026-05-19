@@ -1004,8 +1004,9 @@ function updateWhatsAppLink(total) {
   lines.push('Nombre / empresa:');
   lines.push('Fecha de entrega deseada:');
 
-  const encoded = lines.map(l => encodeURIComponent(l)).join('%0A');
-  document.getElementById('whatsapp-link').setAttribute('href', `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`);
+  const msg = lines.join('\n');
+  const link = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodeURIComponent(msg)}`;
+  document.getElementById('whatsapp-link').setAttribute('href', link);
 }
 
 /* ============================================
