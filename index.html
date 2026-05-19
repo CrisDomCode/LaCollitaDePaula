@@ -212,7 +212,6 @@ body {
   padding-bottom: 0.25rem;
 }
 
-.category-pills::after { content: ''; display: block; min-width: 1rem; flex-shrink: 0; }
 
 .pill {
   flex-shrink: 0;
@@ -811,6 +810,7 @@ function renderPills() {
   categories.forEach(cat => {
     html += `<button class="pill ${activeCategory === cat ? 'active' : ''}" onclick="setCategory('${escapeAttr(cat)}')">${escapeHTML(cat)}</button>`;
   });
+  html += `<span style="min-width:1rem;flex-shrink:0;" aria-hidden="true"></span>`;
   container.innerHTML = html;
 }
 
